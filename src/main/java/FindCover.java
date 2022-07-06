@@ -4,6 +4,7 @@ import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.IntTag;
 import net.querz.nbt.tag.ListTag;
 import net.querz.nbt.tag.Tag;
+import net.querz.nbt.tag.LongTag;
 
 import java.io.IOException;
 
@@ -17,13 +18,15 @@ public class FindCover {
 
         for (CompoundTag c : dl) {
             if (c.getString("Id").equals("refinedstorage:cable")) {
+                LongTag cablePos = c.getLongTag("Pos");
                 CompoundTag cableData = c.getCompoundTag("Data");
                 CompoundTag cover = cableData.getCompoundTag("Cover");
                 if (cover != null && cover.size() > 0) {
                     for (Tag<?> cover_val : cover.values()) {
                         CompoundTag cv = (CompoundTag) cover_val;
                         IntTag coverItem = cv.getIntTag("Direction");
-                        System.out.println(coverItem.valueToString());
+                        System.out.println("Node Pos: " + cablePos.valueToString() + "\n" + "Cover Direction: " + coverItem.valueToString() + "\n");
+                        //System.out.println(cablePos.valueToString());
                     }
                 }
             }
