@@ -8,6 +8,8 @@
 
 <hr>
 
+**Requires Java 17!**
+
 To use this tool, download the latest release, and run the jar file with the command line;
 
 `java -jar <jar file name>`
