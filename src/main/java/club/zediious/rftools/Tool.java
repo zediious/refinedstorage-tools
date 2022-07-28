@@ -13,26 +13,14 @@ import java.util.Scanner;
 
 public class Tool {
 
+    // Tools called from "idle()" method by user
+
     public static void findCovers() {
 
-        Scanner userInput = new Scanner(System.in);
+        NamedTag namedTag = findNodesFile();
         System.out.println("Please type what type of node you you wish to search for (i.e cable, importer)");
-        String nodeInput = userInput.nextLine();
-        String nodeType = "refinedstorage:" + nodeInput;
-        NamedTag namedTag = null;
+        String nodeType = getNodeFromUser();
 
-        try {
-
-            namedTag = NBTUtil.read("refinedstorage_nodes.dat");
-
-        } catch (Exception e) {
-
-            System.out.println("\nYou must place \"refinedstorage_nodes.dat\" in the same directory as the binary\n\n" +
-                    e + "\n");
-            System.exit(1);
-
-        }
-        assert namedTag != null;
         CompoundTag refinedstorage_nodes = (CompoundTag) namedTag.getTag();
         System.out.println("DataVersion: " + refinedstorage_nodes.getInt("DataVersion"));
         System.out.println("\n" + "Searching for: " + nodeType + "\n");
@@ -56,35 +44,17 @@ public class Tool {
                                 "Cover Direction: " + coverItem.valueToString() + "\n");
 
                     }
-
                 }
-
             }
-
         }
-
     }
 
     public static void pullCovers() throws IOException {
 
-        Scanner userInput = new Scanner(System.in);
+        NamedTag namedTag = findNodesFile();
         System.out.println("Please type what type of node you wish to remove covers from (i.e cable, importer)");
-        String nodeInput = userInput.nextLine();
-        String nodeType = "refinedstorage:" + nodeInput;
-        NamedTag namedTag = null;
+        String nodeType = getNodeFromUser();
 
-        try {
-
-            namedTag = NBTUtil.read("refinedstorage_nodes.dat");
-
-        } catch (Exception e) {
-
-            System.out.println("\nYou must place \"refinedstorage_nodes.dat\" in the same directory as the binary\n\n" +
-                    e + "\n");
-            System.exit(1);
-
-        }
-        assert namedTag != null;
         CompoundTag refinedstorage_nodes = (CompoundTag) namedTag.getTag();
         System.out.println("DataVersion: " + refinedstorage_nodes.getInt("DataVersion"));
         CompoundTag data = (CompoundTag) refinedstorage_nodes.get("data");
@@ -100,7 +70,37 @@ public class Tool {
 
         }
 
+        System.out.println("\nWriting to new file \"refinedstorage_nodes_no_covers.dat\"\n");
         NBTUtil.write(namedTag, "refinedstorage_nodes_no_covers.dat");
+
+    }
+
+    // Utility methods, used within above tools
+
+    static String getNodeFromUser() {
+
+        Scanner userInput = new Scanner(System.in);
+        String nodeInput = userInput.nextLine();
+        return "refinedstorage:" + nodeInput;
+
+    }
+
+    static NamedTag findNodesFile() {
+
+        NamedTag namedTag = null;
+
+        try {
+
+            namedTag = NBTUtil.read("refinedstorage_nodes.dat");
+
+        } catch (IOException e) {
+
+            System.out.println("\nYou must place \"refinedstorage_nodes.dat\" in the same directory as the binary\n\n" + e + "\n");
+            System.exit(1);
+
+        }
+
+        return namedTag;
 
     }
 
